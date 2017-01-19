@@ -27,6 +27,7 @@ function dragula (initialContainers, options) {
   var _grabbed; // holds mousedown context until first mousemove
   var _lastClickTime;
   var _timerExpired = true;
+  var _timer;
 
   var o = options || {};
   if (o.moves === void 0) { o.moves = always; }
@@ -109,9 +110,10 @@ function dragula (initialContainers, options) {
     }
     _grabbed = context;
     if (o.dragStartDelay) {
+      cancelTimer();
       _lastClickTime = new Date();
       _timerExpired = false;
-      setTimeout(function() {
+      _timer = setTimeout(function() {
         _timerExpired = true;
       }, o.dragStartDelay);
     }
@@ -125,8 +127,16 @@ function dragula (initialContainers, options) {
     }
   }
 
+  function cancelTimer() {
+    if (_timer) {
+      clearTimeout(_timer);
+      _timer = null;
+    }
+  }
+
   function startBecauseMouseMoved (e) {
     if (!_grabbed || !_timerExpired) {
+      cancelTimer();
       return;
     }
     if (whichMouseButton(e) === 0) {
@@ -239,6 +249,7 @@ function dragula (initialContainers, options) {
   }
 
   function release (e) {
+    cancelTimer();
     ungrab();
 
     if (!drake.dragging) {
