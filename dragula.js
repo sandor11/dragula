@@ -90,14 +90,14 @@ function dragula (initialContainers, options) {
   }
 
   function preventGrabbed (e) {
-    drag.emit('preventgrab');
+    drake.emit('preventgrab');
     if (_grabbed) {
       e.preventDefault();
     }
   }
 
   function grab (e) {
-    drag.emit('grab');
+    drake.emit('grab');
     _moveX = e.clientX;
     _moveY = e.clientY;
 
@@ -141,7 +141,7 @@ function dragula (initialContainers, options) {
   }
 
   function startBecauseMouseMoved (e) {
-    drag.emit('mousemoved');
+    drake.emit('mousemoved');
     if (!_grabbed || !_timerExpired) {
       cancelTimer();
       return;
@@ -250,14 +250,14 @@ function dragula (initialContainers, options) {
   }
 
   function ungrab () {
-    drag.emit('ungrab');
+    drake.emit('ungrab');
     _grabbed = false;
     eventualMovements(true);
     movements(true);
   }
 
   function release (e) {
-    drag.emit('release');
+    drake.emit('release');
     cancelTimer();
     ungrab();
 
