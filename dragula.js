@@ -112,9 +112,7 @@ function dragula (initialContainers, options) {
       _lastClickTime = new Date();
       _timerExpired = false;
       setTimeout(function() {
-        var timeSinceClick = new Date() - _lastClickTime;
-        console.log('time since last click: ' + timeSinceClick);
-        _timerExpired = timeSinceClick < o.dragStartDelay;
+        _timerExpired = true;
       }, o.dragStartDelay);
     }
     eventualMovements();
