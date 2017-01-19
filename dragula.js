@@ -115,7 +115,11 @@ function dragula (initialContainers, options) {
       _timerExpired = false;
       _timer = setTimeout(function() {
         _timerExpired = true;
+        drake.emit('dragready', item);
       }, o.dragStartDelay);
+    }
+    else {
+      drake.emit('dragready', item);
     }
     eventualMovements();
     if (e.type === 'mousedown') {
