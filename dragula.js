@@ -26,6 +26,7 @@ function dragula (initialContainers, options) {
   var _lastDropTarget = null; // last container item was over
   var _grabbed; // holds mousedown context until first mousemove
   var _lastClickTime;
+  var _timerExpired = true;
 
   var o = options || {};
   if (o.moves === void 0) { o.moves = always; }
@@ -107,7 +108,15 @@ function dragula (initialContainers, options) {
       return;
     }
     _grabbed = context;
-    _lastClickTime = new Date();
+    if (o.dragStartDelay) {
+      _lastClickTime = new Date();
+      _timerExpired = false;
+      setTimeout(function() {
+        var timeSinceClick = new Date() - _lastClickTime;
+        console.log('time since last click: ' + timeSinceClick);
+        _timerExpired = timeSinceClick < o.dragStartDelay;
+      }, o.dragStartDelay);
+    }
     eventualMovements();
     if (e.type === 'mousedown') {
       if (isInput(item)) { // see also: https://github.com/bevacqua/dragula/issues/208
@@ -119,12 +128,7 @@ function dragula (initialContainers, options) {
   }
 
   function startBecauseMouseMoved (e) {
-    if (!_grabbed) {
-      return;
-    }
-    var timeSinceClick = new Date() - _lastClickTime;
-    console.log('time since last click: ' + timeSinceClick);
-    if (timeSinceClick < o.dragStartDelay) {
+    if (!_grabbed || !_timerExpired) {
       return;
     }
     if (whichMouseButton(e) === 0) {
