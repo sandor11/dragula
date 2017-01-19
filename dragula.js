@@ -90,12 +90,14 @@ function dragula (initialContainers, options) {
   }
 
   function preventGrabbed (e) {
+    drag.emit('preventgrab');
     if (_grabbed) {
       e.preventDefault();
     }
   }
 
   function grab (e) {
+    drag.emit('grab');
     _moveX = e.clientX;
     _moveY = e.clientY;
 
@@ -139,6 +141,7 @@ function dragula (initialContainers, options) {
   }
 
   function startBecauseMouseMoved (e) {
+    drag.emit('mousemoved');
     if (!_grabbed || !_timerExpired) {
       cancelTimer();
       return;
@@ -247,12 +250,14 @@ function dragula (initialContainers, options) {
   }
 
   function ungrab () {
+    drag.emit('ungrab');
     _grabbed = false;
     eventualMovements(true);
     movements(true);
   }
 
   function release (e) {
+    drag.emit('release');
     cancelTimer();
     ungrab();
 
